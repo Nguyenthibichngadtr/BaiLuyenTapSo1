@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa học 10 - Bài test số 1 - Mrs Nga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Cấu hình MathJax chuẩn để hiển thị công thức hóa học số dưới -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true
+            },
+            CommonHTML: { linebreaks: { automatic: false } },
+            "HTML-CSS": { linebreaks: { automatic: false } },
+            SVG: { linebreaks: { automatic: false } }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&family=Quicksand:wght@500;700&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #0ea5e9;
+            --bg-pastel-blue: #f0f9ff;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100dvh;
+            background: #e0f2fe; 
+            font-family: 'Be Vietnam Pro', sans-serif;
+            overflow: hidden; /* Khóa hoàn toàn tính năng cuộn tổng */
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(186, 230, 253, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(125, 211, 252, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(224, 242, 254, 0.5) 0px, transparent 50%);
+        }
+
+        .game-screen {
+            /* Ép cứng tỉ lệ 6:19 */
+            aspect-ratio: 6 / 19;
+            
+            /* Tính toán để luôn nằm gọn trong khung hình mà không bị tràn */
+            width: min(100vw, calc(100dvh * 6 / 19));
+            height: min(100dvh, calc(100vw * 19 / 6));
+            
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            padding: 5cqw;
+            box-sizing: border-box;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+            
+            /* Kích hoạt tính năng Container cho các phần tử con */
+            container-type: inline-size;
+        }
+
+        /* Khi màn hình rộng (như máy tính/iPad), bo tròn góc để giống mô hình điện thoại */
+        @media (min-width: 481px) {
+            .game-screen { 
+                width: min(94vw, calc(94dvh * 6 / 19));
+                height: min(94dvh, calc(94vw * 19 / 6));
+                border-radius: 4cqw; 
+                border: 1cqw solid white;
+            }
+        }
+        
+        .game-screen::-webkit-scrollbar { display: none; }
+
+        /* --- Start Screen --- */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            padding: 2cqw 0;
+            box-sizing: border-box;
+        }
+
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 6cqw;
+            width: 100%;
+            margin-top: 4cqw;
+        }
+
+        .icon-hero {
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            width: 16cqw;
+            height: 16cqw;
+            border-radius: 4cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 7.5cqw;
+            box-shadow: 0 1vh 2vh rgba(14, 165, 233, 0.3);
+            margin-bottom: 3cqw;
+        }
+        
+        .course-name {
+            font-size: 3.5cqw;
+            color: #0ea5e9;
+            font-weight: 800;
+            letter-spacing: 0.5cqw;
+            text-transform: uppercase;
+            margin-bottom: 1.5cqw;
+        }
+
+        .main-title {
+            font-size: 9cqw;
+            font-weight: 900;
+            line-height: 1.2;
+            color: #0f172a;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-section {
+            flex: 1.5;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 85cqw;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 5cqw 6cqw;
+            border-radius: 4cqw;
+            border: 1px solid #e0f2fe;
+            box-sizing: border-box;
+            box-shadow: 0 1vh 2vh rgba(14, 165, 233, 0.08);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            color: #64748b;
+            font-size: 3.8cqw; 
+            margin-bottom: 1cqw;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 3cqw 4cqw; 
+            border-radius: 2.5cqw;
+            border: 2px solid #e2e8f0;
+            font-size: 4.5cqw; 
+            font-weight: 600;
+            background: #f8fafc;
+            margin-bottom: 3cqw;
+            color: #0f172a;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        
+        .input-group input:focus {
+            border-color: #0ea5e9;
+            background: white;
+        }
+
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(to right, #0284c7, #0ea5e9);
+            color: white;
+            padding: 3cqw;
+            border-radius: 2.5cqw;
+            font-weight: 800;
+            font-size: 5cqw;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5cqw;
+            border: none;
+            box-shadow: 0 0.5vh 1.5vh rgba(14, 165, 233, 0.3);
+            margin-top: 1cqw;
+        }
+
+        .start-btn:hover { transform: translateY(-2px); box-shadow: 0 1vh 2vh rgba(14, 165, 233, 0.4); }
+        
+        .author-text {
+            font-size: 3cqw;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: auto;
+            padding-bottom: 2cqw;
+        }
+
+        /* --- Quiz UI --- */
+        #quiz-ui { 
+            display: none; 
+            height: 100%; 
+            flex-direction: column; 
+            overflow: hidden; /* Khóa tràn tổng thể */
+            padding-bottom: 2cqw; /* Cách đáy một chút */
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 2cqw; /* Thu nhỏ khoảng cách */
+            align-items: stretch;
+            margin-bottom: 2cqw;
+            padding-bottom: 2cqw;
+            border-bottom: 1px solid #f1f5f9;
+            flex-shrink: 0; /* Header không bao giờ bị bóp nhỏ */
+        }
+        
+        .header-top, .header-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .header-icon {
+            background: var(--primary);
+            width: 11cqw;
+            height: 11cqw;
+            border-radius: 3cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5.5cqw;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .user-info-text { font-size: 5cqw; font-weight: 800; color: #1e293b; line-height: 1.2; }
+        .sub-title-text { font-size: 3.5cqw; color: var(--primary); font-weight: 700; letter-spacing: 1px; }
+        .progress-text-ui { font-size: 4.5cqw; color: #94a3b8; font-weight: 800; }
+        
+        .score-box-ui { 
+            background: #fff7ed; border: 2px solid #ffedd5; 
+            padding: 1.5cqw 3cqw; border-radius: 2.5cqw; 
+            color: #ea580c; font-weight: 800; font-size: 4.5cqw; 
+        }
+
+        .mute-toggle {
+            cursor: pointer;
+            width: 9cqw;
+            height: 9cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2.5cqw;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 4.5cqw;
+            border: none;
+        }
+        .mute-toggle.active { background: #fee2e2; color: #ef4444; }
+
+        .question-container {
+            background: #f8fafc;
+            border-radius: 4cqw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Dùng flex-start để không bị lỗi cắt mất chữ khi cuộn */
+            justify-content: flex-start; 
+            padding: 3cqw 4cqw;
+            margin-bottom: 2cqw;
+            position: relative;
+            border: 2px solid white;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+            
+            /* KỸ THUẬT CỐT LÕI: Khống chế câu hỏi chỉ được chiếm TỐI ĐA 35% chiều cao màn hình để đủ chỗ cho chữ to */
+            flex: 0 1 auto; 
+            max-height: 35%; 
+            min-height: 0; 
+            overflow-y: auto;
+        }
+
+        .question-text {
+            font-size: 5.2cqw; /* Tăng cỡ chữ để dễ đọc hơn trên điện thoại */
+            font-weight: 800;
+            color: #1e293b;
+            text-align: center;
+            line-height: 1.4;
+            /* Căn giữa dọc thông minh: Nếu chữ ngắn sẽ ở giữa, nếu dài sẽ cuộn từ trên xuống */
+            margin: auto 0; 
+            width: 100%;
+        }
+
+        #explanationBox {
+            display: none;
+            background: #fffbeb;
+            border-left: 1.5cqw solid #f59e0b;
+            border-radius: 3cqw;
+            padding: 2.5cqw 3cqw;
+            margin-bottom: 2cqw;
+            animation: slideIn 0.3s ease-out;
+            
+            /* Box này cũng bị khống chế tối đa 30% chiều cao */
+            flex: 0 1 auto;
+            max-height: 30%;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .explanation-title { color: #92400e; font-weight: 800; font-size: 4cqw; margin-bottom: 1cqw; text-transform: uppercase; }
+        .explanation-content { color: #78350f; font-size: 4.5cqw; font-weight: 600; line-height: 1.4; }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5cqw;
+            margin-bottom: 2cqw;
+            
+            /* Khu vực đáp án sẽ lấy TOÀN BỘ KHÔNG GIAN DƯ CÒN LẠI ở dưới */
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .opt-btn {
+            display: flex;
+            align-items: flex-start;
+            padding: 2.5cqw 3cqw;
+            border-radius: 3cqw;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            color: #334155;
+            min-height: 11cqw;
+            flex-shrink: 0; /* Bản thân từng nút bấm không bị móp méo */
+        }
+
+        .opt-text { 
+            font-size: 4.5cqw; /* Tăng cỡ chữ đáp án */
+            display: block; 
+            white-space: normal; 
+            line-height: 1.4; 
+            text-align: left;
+            margin-top: 0.8cqw;
+        }
+
+        .badge {
+            width: 7.5cqw; /* Tăng nhẹ kích thước badge */
+            height: 7.5cqw;
+            border-radius: 2cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 3cqw;
+            margin-top: 0;
+            flex-shrink: 0;
+            font-size: 4cqw; /* Tăng chữ trong badge */
+            color: white;
+            font-weight: 800;
+        }
+
+        .opt-a { border-color: #e0e7ff; } .opt-a:hover:not(:disabled) { background: #eef2ff; border-color: #6366f1; }
+        .opt-b { border-color: #fef3c7; } .opt-b:hover:not(:disabled) { background: #fffbeb; border-color: #f59e0b; }
+        .opt-c { border-color: #e0f2fe; } .opt-c:hover:not(:disabled) { background: #f0f9ff; border-color: #0ea5e9; }
+        .opt-d { border-color: #dcfce7; } .opt-d:hover:not(:disabled) { background: #f0fdf4; border-color: #22c55e; }
+        .opt-a .badge { background: #818cf8; } .opt-b .badge { background: #fbbf24; }
+        .opt-c .badge { background: #38bdf8; } .opt-d .badge { background: #4ade80; }
+
+        .correct { background: #10b981 !important; color: white !important; border-color: transparent !important; box-shadow: 0 0.5vh 1.5vh rgba(16, 185, 129, 0.3) !important; }
+        .wrong { background: #f43f5e !important; color: white !important; border-color: transparent !important; }
+
+        .next-btn {
+            width: 100%;
+            background: #1e293b;
+            color: white;
+            padding: 3cqw;
+            border-radius: 3cqw;
+            font-weight: 800;
+            font-size: 5cqw;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 2cqw;
+            border: none;
+            cursor: pointer;
+            flex-shrink: 0; /* Nút tiếp tục LUÔN LUÔN giữ nguyên kích thước, không bao giờ bị bóp biến mất */
+            margin-bottom: 2cqw; /* Tạo khoảng cách với phần đáp án bị đẩy xuống dưới */
+        }
+
+        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 4cqw 0; }
+
+        .result-icon { font-size: 20cqw; line-height: 1; margin-bottom: 4cqw; }
+        .result-title { font-size: 8cqw; font-weight: 900; color: #1e293b; margin-bottom: 2cqw; line-height: 1.2; }
+        .result-user { font-size: 4cqw; color: #4f46e5; font-weight: 700; margin-bottom: 8cqw; font-style: italic; }
+        .result-box { background: white; padding: 6cqw; border-radius: 5cqw; border: 2px solid #f1f5f9; box-shadow: 0 1vh 2.5vh rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
+        .result-label { font-size: 3.5cqw; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2cqw; }
+        .result-score { font-size: 16cqw; font-weight: 900; color: #4f46e5; line-height: 1; }
+        .result-btn { margin-top: 8cqw; font-size: 4.5cqw; font-weight: 800; color: white; background: #4f46e5; padding: 4cqw; border-radius: 3cqw; width: 100%; box-shadow: 0 1vh 2.5vh rgba(0,0,0,0.1); border: none; cursor: pointer; }
+
+        .MathJax_Display, .MathJax { margin: 0 !important; display: inline-block !important; }
+    </style>
+</head>
+<body>
+
+    <div class="game-screen">
+        
+        <!-- Màn hình khởi động -->
+        <div id="start-screen">
+            <div class="hero-section">
+                <div class="icon-hero"><i class="fas fa-flask"></i></div>
+                <div class="course-name">Hóa học 10</div>
+                <h1 class="main-title">BÀI TEST SỐ 1</h1>
+            </div>
+            
+            <div class="form-section">
+                <div class="login-card">
+                    <div class="input-group">
+                        <label>Họ và tên</label>
+                        <input type="text" id="studentName" placeholder="Nhập đầy đủ họ tên...">
+                        <label>Lớp học</label>
+                        <input type="text" id="studentClass" placeholder="Ví dụ: 10A1...">
+                    </div>
+                    <button class="start-btn" onclick="startQuiz()">Bắt đầu <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            
+            <p class="author-text">Phát triển bởi Mrs Nga</p>
+        </div>
+
+        <!-- Quiz UI -->
+        <div id="quiz-ui">
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-icon shrink-0">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div style="flex-grow: 1; margin-left: 4cqw;">
+                        <div id="displayUserInfo" class="user-info-text">Học sinh: ...</div>
+                        <div class="sub-title-text">Tạo bởi Mrs Nga</div>
+                    </div>
+                </div>
+                
+                <div class="header-bottom">
+                    <div id="progress-text" class="progress-text-ui">CÂU 1/40</div>
+                    <div style="display: flex; align-items: center; gap: 3cqw;">
+                        <button id="muteBtn" class="mute-toggle" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-up"></i></button>
+                        <div id="scoreBox" class="score-box-ui">
+                            ⭐ <span id="currentScore">0</span> ĐIỂM
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="questionWrapper" class="question-container">
+                <h2 id="questionText" class="question-text">...</h2>
+            </div>
+
+            <div id="explanationBox">
+                <div class="explanation-title"><i class="fas fa-lightbulb mr-2"></i>Hướng dẫn kiến thức</div>
+                <div id="explanationContent" class="explanation-content"></div>
+            </div>
+
+            <!-- Nút Tiếp Tục được đặt trên phần Lưới đáp án -->
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()">TIẾP TỤC <i class="fas fa-arrow-right"></i></button>
+
+            <div id="optionsGrid" class="options-grid"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen">
+            <div class="result-icon animate-bounce">🏆</div>
+            <h1 class="result-title">Chúc mừng!</h1>
+            <p id="displayFinalUser" class="result-user">...</p>
+            <div class="result-box">
+                <p class="result-label">Kết quả cuối cùng</p>
+                <div class="result-score"><span id="finalScore">0</span>/10</div>
+            </div>
+            <button class="result-btn" onclick="location.reload()">LÀM LẠI BÀI</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Trong các đơn chất halogen, từ $F_2$ đến $I_2$, nhiệt độ sôi biến đổi như thế nào?", options: ["Giảm dần.", "Tăng dần.", "Không đổi.", "Tuần hoàn."], correct: 1, explanation: "Từ fluorine đến iodine, khối lượng phân tử tăng và tương tác van der Waals tăng làm cho nhiệt độ sôi của các đơn chất halogen tăng dần." },
+            { q: "Tốc độ phản ứng không phụ thuộc yếu tố nào sau đây?", options: ["Bề mặt tiếp xúc giữa các chất phản ứng", "Nồng độ các chất tham gia phản ứng.", "Thời gian xảy ra phản ứng", "Chất xúc tác"], correct: 2, explanation: "Tốc độ phản ứng phụ thuộc vào nồng độ, nhiệt độ, áp suất (với chất khí), diện tích bề mặt và chất xúc tác; nó không phụ thuộc vào tổng thời gian phản ứng đã trôi qua." },
+            { q: "Liên kết trong phân tử đơn chất halogen là", options: ["liên kết van der Waals.", "liên kết ion.", "liên kết cộng hóa trị.", "liên kết cho nhận."], correct: 2, explanation: "Các nguyên tử halogen góp chung một cặp electron để hình thành liên kết cộng hóa trị không cực trong phân tử $X_2$." },
+            { q: "Đối với các phản ứng có chất khí tham gia, khi tăng áp suất, tốc độ phản ứng tăng là do", options: ["Nồng độ của các chất khí giảm xuống.", "Chuyển động của các chất khí tăng lên.", "Nồng độ của các chất khí tăng lên.", "Nồng độ của các chất khí không thay đổi"], correct: 2, explanation: "Khi tăng áp suất của hệ phản ứng có chất khí, thể tích hệ giảm làm nồng độ các chất khí tăng lên, dẫn đến số va chạm hiệu quả tăng và tốc độ phản ứng tăng." },
+            { q: "$KBr$ thể hiện tính khử khi đun nóng với dung dịch nào sau đây?", options: ["$H_2SO_4$ loãng.", "$H_2SO_4$ đặc.", "$AgNO_3$", "$HCl$."], correct: 1, explanation: "$KBr$ tác dụng với $H_2SO_4$ đặc nóng xảy ra phản ứng oxi hóa - khử, trong đó $Br^-$ bị oxi hóa thành $Br_2$." },
+            { q: "Các nguyên tố halogen thuộc nhóm nào trong bảng tuần hoàn?", options: ["VIA", "VA", "IVA.", "VIIA."], correct: 3, explanation: "Nhóm VIIA trong bảng tuần hoàn bao gồm các nguyên tố halogen: $F, Cl, Br, I, At$." },
+            { q: "Cho phản ứng: $2SO_2 + O_2 \\rightarrow 2SO_3$. Tốc độ phản ứng tăng lên 2 lần khi:", options: ["Tăng đồng thời nồng độ $SO_2$ và $O_2$ lên 2 lần.", "Tăng nồng độ $O_2$ lên 2 lần", "Tăng nồng độ $SO_2$ lên 2 lần.", "Tăng nồng độ $SO_2$ lên 4 lần"], correct: 1, explanation: "Biểu thức tốc độ tức thời là $v = k \\cdot [SO_2]^2 \\cdot [O_2]$. Khi nồng độ $O_2$ tăng 2 lần (giữ nguyên $SO_2$), tốc độ phản ứng sẽ tăng 2 lần." },
+            { q: "Phân tử có tương tác van der Waals lớn nhất là", options: ["$HF$.", "$HCl$.", "$HBr$.", "$HI$."], correct: 3, explanation: "Tương tác van der Waals tăng theo kích thước và khối lượng phân tử. Trong dãy này, $HI$ có khối lượng và kích thước lớn nhất." },
+            { q: "Tủ lạnh để bảo quản thức ăn là ứng dụng cho yếu tố ảnh hưởng tốc độ phản ứng nào?", options: ["Chất xúc tác.", "Nồng độ.", "Nhiệt độ.", "Diện tích bề mặt tiếp xúc."], correct: 2, explanation: "Nhiệt độ thấp trong tủ lạnh làm chậm các phản ứng hóa học và sinh học gây hư hỏng thực phẩm." },
+            { q: "Cho phản ứng: $2NO (g) + 2H_2 (g) \\rightarrow N_2(g) + 2H_2O(g)$. Biểu thức tính tốc độ theo sự biến đổi nồng độ chất đầu của phản ứng là", options: ["$v = -\\frac{1}{2} \\frac{\\Delta [NO]}{\\Delta t}$", "$v = \\frac{\\Delta [N_2]}{\\Delta t}$", "$v = \\frac{1}{2} \\frac{\\Delta [H_2O]}{\\Delta t}$", "$v = -\\frac{\\Delta [H_2]}{\\Delta t}$"], correct: 0, explanation: "Tốc độ phản ứng được tính bằng độ biến thiên nồng độ chia cho hệ số tương ứng; với chất đầu phải có dấu âm ($v = -\\frac{1}{2} \\frac{\\Delta [NO]}{\\Delta t} = -\\frac{1}{2} \\frac{\\Delta [H_2]}{\\Delta t}$)." },
+            { q: "Phản ứng $N_2(g) + 3H_2(g) \\rightarrow 2NH_3(g)$ có biểu thức tốc độ tức thời là", options: ["$v = k \\cdot [N_2] \\cdot [H_2]$.", "$v = k \\cdot [N_2] \\cdot [H_2]^3$.", "$v = k \\cdot [N_2] \\cdot [H_2]^2$.", "$v = k \\cdot [NH_3]^2$."], correct: 1, explanation: "Theo định luật tác dụng khối lượng, tốc độ phản ứng tỉ lệ thuận với tích nồng độ chất phản ứng kèm số mũ là hệ số tỉ lượng." },
+            { q: "Cho phản ứng: $aA + bB \\rightarrow cC + dD$, tốc độ phản ứng trung bình được tính theo sự thay đổi nồng độ chất A là", options: ["$v_{tb} = -\\frac{\\Delta C_A}{\\Delta t}$", "$v_{tb} = \\frac{\\Delta C_A}{\\Delta t}$", "$v_{tb} = \\frac{1}{a} \\frac{\\Delta C_A}{\\Delta t}$", "$v_{tb} = -\\frac{1}{a} \\frac{\\Delta C_A}{\\Delta t}$"], correct: 3, explanation: "Vì A là chất phản ứng (nồng độ giảm), ta thêm dấu trừ và chia cho hệ số $a$ để tốc độ trung bình luôn dương." },
+            { q: "Thứ tự tăng dần tính acid của các Hydrohalic acid (HX) là", options: ["$HI < HBr < HCl < HF$.", "$HF < HCl < HBr < HI$.", "$HBr < HI < HCl < HF$.", "$HCl < HBr < HI < HF$."], correct: 1, explanation: "Từ $HF$ đến $HI$, độ dài liên kết $H-X$ tăng làm liên kết dễ bị đứt hơn, dẫn đến khả năng phân li $H^+$ tăng, tính acid tăng mạnh dần." },
+            { q: "Khí $HCl$ tan trong nước tạo thành dung dịch acid tương ứng làm quỳ tím", options: ["chuyển sang không màu.", "chuyển sang màu xanh.", "chuyển sang màu đỏ.", "không chuyển màu."], correct: 2, explanation: "$HCl$ là một acid mạnh, khi vào nước tạo ra môi trường acid làm quỳ tím hóa đỏ." },
+            { q: "Cho muối halide nào sau đây tác dụng với dung dịch $H_2SO_4$ đặc, nóng thì chỉ xảy ra phản ứng trao đổi?", options: ["$KI$.", "$NaCl$.", "$NaBr$.", "$KBr$."], correct: 1, explanation: "$F^-$ và $Cl^-$ có tính khử yếu nên không bị $H_2SO_4$ đặc oxi hóa, chỉ xảy ra phản ứng trao đổi tạo khí $HF$ hoặc $HCl$." },
+            { q: "Khi nhiệt độ phản ứng tăng lên thì", options: ["tốc độ va chạm giữa các phân tử tăng lên.", "số va chạm hiệu quả giảm xuống.", "tốc độ chuyển động của các phân tử giảm đi.", "nồng độ của phân tử chất đầu tăng lên."], correct: 0, explanation: "Khi tăng nhiệt độ, các phân tử chuyển động nhanh hơn, dẫn đến tần suất va chạm và số va chạm hiệu quả tăng lên, làm tăng tốc độ phản ứng." },
+            { q: "Khi phản ứng hóa học xảy ra thì:", options: ["Lượng chất đầu và lượng chất sản phẩm không đổi.", "Lượng chất đầu giảm dần, lượng sản phẩm tăng dần theo thời gian.", "Lượng chất đầu tăng dần, lượng sản phẩm giảm dần theo thời gian.", "Cả hai đều tăng dần theo thời gian."], correct: 1, explanation: "Phản ứng hóa học là quá trình biến đổi chất đầu (mất đi) thành chất mới (hình thành thêm)." },
+            { q: "Ion halide được sắp xếp theo chiều giảm dần tính khử:", options: ["$I^-, Br^-, F^-, Cl^-$.", "$F^-, Br^-, Cl^-, I^-$.", "$I^-, Br^-, Cl^-, F^-$.", "$F^-, Cl^-, Br^-, I^-$."], correct: 2, explanation: "Từ $F^-$ đến $I^-$, bán kính ion tăng dẫn đến lực hút hạt nhân với electron lớp ngoài cùng giảm, khả năng nhường electron (tính khử) tăng dần." },
+            { q: "Khi áp suất tăng, tốc độ phản ứng tăng là đúng với phản ứng có chất nào tham gia?", options: ["Cả 3 thể đều đúng.", "Chất khí.", "Chất lỏng.", "Chất rắn."], correct: 1, explanation: "Áp suất ảnh hưởng đáng kể đến khoảng cách giữa các phân tử chất khí, làm thay đổi nồng độ của chúng." },
+            { q: "Trong hợp chất chlorine có các số oxi hóa nào sau đây?", options: ["-1, +1, +3, +5, +7.", "-1, 0, +1, +3, +5, +7.", "-2, 0, +4, +6.", "-1, 0, +1, +2, +3, +5, +7."], correct: 0, explanation: "Trong các hợp chất, số oxi hóa của Chlorine thường là -1 (trong chloride) và +1, +3, +5, +7 (trong các hợp chất có oxygen)." },
+            { q: "Khi cho $Cl_2$ tác dụng với dung dịch $KOH$, đun nóng thu được dung dịch chứa muối $KCl$ và muối nào?", options: ["$KClO$.", "$KClO_4$.", "$KClO_3$.", "$KClO_2$."], correct: 2, explanation: "Phản ứng ở $70^o C$: $3Cl_2 + 6KOH \\rightarrow 5KCl + KClO_3 + 3H_2O$." },
+            { q: "Yếu tố giúp đèn xì acetylene cháy trong oxygen nguyên chất mạnh hơn trong không khí là:", options: ["áp suất.", "xúc tác.", "nồng độ chất phản ứng.", "diện tích bề mặt."], correct: 2, explanation: "Oxygen nguyên chất có nồng độ $O_2$ cao hơn nhiều so với không khí (khoảng 21%), làm tăng tốc độ phản ứng cháy." },
+            { q: "Cho phản ứng trong bình kín: $2NO(g) + O_2(g) \\rightarrow 2NO_2(g)$. Biểu thức tốc độ tức thời là", options: ["$v = k \\cdot [NO] \\cdot [O_2]$.", "$v = 2k \\cdot [NO]^2 \\cdot [O_2]$.", "$v = k \\cdot [NO_2] \\cdot [O_2]$.", "$v = k \\cdot [NO]^2 \\cdot [O_2]$."], correct: 3, explanation: "Biểu thức tốc độ tính theo định luật tác dụng khối lượng cho phản ứng đơn giản là tích nồng độ chất phản ứng kèm số mũ hệ số tỉ lượng." },
+            { q: "Khí hydrogen iodide có công thức hóa học là", options: ["$HF$.", "$HBr$.", "$HCl$.", "$HI$."], correct: 3, explanation: "Hydrogen iodide gồm nguyên tố Hydrogen liên kết với Iodine, công thức là $HI$." },
+            { q: "Cho phản ứng: $Zn(s) + H_2SO_4(aq) \\rightarrow ZnSO_4(aq) + H_2(g)$. Yếu tố nào không ảnh hưởng đến tốc độ?", options: ["Nồng độ acid.", "Thể tích dung dịch acid.", "Nhiệt độ dung dịch.", "Diện tích bề mặt Zinc."], correct: 1, explanation: "Tốc độ phản ứng phụ thuộc nồng độ (chất tham gia có trong một đơn vị thể tích), không phụ thuộc vào tổng lượng (thể tích) dung dịch dùng dư." },
+            { q: "Dung dịch hydrohalic acid nào sau đây có tính acid yếu?", options: ["$HBr$.", "$HF$.", "$HCl$.", "$HI$."], correct: 1, explanation: "Trong dãy $HX$, duy nhất $HF$ là acid yếu do năng lượng liên kết $H-F$ rất lớn và khả năng tạo liên kết hydrogen mạnh." },
+            { q: "Nhiệt độ nóng chảy, nhiệt độ sôi của các halogen tăng từ $F_2$ đến $I_2$ là do:", options: ["tính phi kim giảm và tương tác van der Waals tăng.", "khối lượng phân tử và tương tác van der Waals đều tăng.", "độ âm điện và tương tác van der Waals đều giảm.", "khối lượng phân tử tăng và tương tác van der Waals giảm."], correct: 1, explanation: "Khi phân tử khối tăng, tương tác van der Waals giữa các phân tử halogen mạnh lên, cần nhiều năng lượng hơn để phá vỡ nên nhiệt độ sôi/nóng chảy tăng." },
+            { q: "Sau phản ứng, khối lượng của chất xúc tác sẽ", options: ["có thể tăng hoặc giảm.", "tăng lên.", "không thay đổi.", "giảm xuống."], correct: 2, explanation: "Chất xúc tác làm tăng tốc độ phản ứng nhưng không bị tiêu hao hay biến đổi về lượng và chất sau khi phản ứng kết thúc." },
+            { q: "Tốc độ phản ứng là", options: ["độ biến thiên lượng chất của một sản phẩm trong một đơn vị thời gian.", "độ biến thiên lượng chất của một trong các chất phản ứng hoặc sản phẩm trong một đơn vị thời gian.", "độ biến thiên lượng chất của các chất phản ứng trong một đơn vị thời gian.", "độ biến thiên lượng chất của một chất phản ứng trong một đơn vị thời gian."], correct: 1, explanation: "Định nghĩa chuẩn về tốc độ phản ứng đo lường mức độ nhanh chậm của sự thay đổi nồng độ/lượng chất theo thời gian." },
+            { q: "Phản ứng nào sau đây $HCl$ thể hiện tính khử?", options: ["$HCl + NaOH \\rightarrow NaCl + H_2O$.", "$2HCl + CaCO_3 \\rightarrow CaCl_2 + CO_2 + H_2O$.", "$4HCl + MnO_2 \\rightarrow MnCl_2 + Cl_2 + 2H_2O$.", "$2HCl + Mg \\rightarrow MgCl_2 + H_2$."], correct: 2, explanation: "Trong phản ứng với $MnO_2$, số oxi hóa của Chlorine tăng từ -1 lên 0 ($Cl_2$), chứng tỏ $HCl$ đóng vai trò là chất khử." },
+            { q: "Cho aluminium ($Al$) vào acid $HCl$ 0,1M, tốc độ phản ứng lớn nhất khi dùng $Al$ ở dạng nào?", options: ["Dạng thỏi lớn.", "Dạng bột mịn, khuấy đều.", "Dạng tấm mỏng.", "Dạng viên nhỏ."], correct: 1, explanation: "Dạng bột mịn giúp tăng tối đa diện tích bề mặt tiếp xúc giữa $Al$ và acid, làm tăng tần suất va chạm hiệu quả." },
+            { q: "Cho phản ứng pha khí: $H_2 + Cl_2 \\rightarrow 2HCl$. Biểu thức tốc độ trung bình là", options: ["$v_{tb} = \\frac{\\Delta [Cl_2]}{\\Delta t}$", "$v_{tb} = -\\frac{\\Delta [H_2]}{\\Delta t}$", "$v_{tb} = -\\frac{1}{2} \\frac{\\Delta [HCl]}{\\Delta t}$", "$v_{tb} = -\\frac{1}{2} \\frac{\\Delta [H_2]}{\\Delta t}$"], correct: 1, explanation: "Tốc độ trung bình tính theo chất tham gia $H_2$ bằng âm độ biến thiên nồng độ chia cho thời gian." },
+            { q: "Ở điều kiện thường, halogen tồn tại ở thể rắn, có màu đen tím là", options: ["$F_2$.", "$Cl_2$.", "$Br_2$.", "$I_2$."], correct: 3, explanation: "Iodine ($I_2$) là chất rắn màu tím đen, dễ thăng hoa khi đun nóng." },
+            { q: "Sản phẩm tạo thành khi cho iron tác dụng với khí chlorine dư là", options: ["$AlCl_3$.", "$FeCl_2$.", "$CuCl_2$.", "$FeCl_3$."], correct: 3, explanation: "Chlorine là chất oxi hóa mạnh, đưa iron lên mức oxi hóa cao nhất là +3, tạo ra muối iron(III) chloride ($FeCl_3$)." },
+            { q: "Khi halogen liên kết cộng hóa trị với phi kim, halogen có xu hướng", options: ["nhường 1 electron.", "nhận 1 electron.", "góp chung 1 electron.", "góp chung 2 electron."], correct: 2, explanation: "Halogen có 7 electron lớp ngoài cùng, cần thêm 1 electron để đạt cấu hình bền vững nên sẽ góp chung 1 electron với nguyên tử phi kim khác." },
+            { q: "Nhỏ vài giọt dung dịch nào vào $AgNO_3$ thu được kết tủa màu vàng nhạt?", options: ["$HCl$.", "$NaCl$.", "$NaBr$.", "$HF$."], correct: 2, explanation: "$AgNO_3$ phản ứng với $NaBr$ tạo kết tủa silver bromide ($AgBr$) có màu vàng nhạt." },
+            { q: "Điền vào chỗ trống: Tốc độ phản ứng là độ biến thiên .(1)…của chất phản ứng hoặc sản phẩm trong một đơn vị …..(2)…", options: ["(1) số mol, (2) thể tích", "(1) nồng độ, (2) thời gian.", "(1) nồng độ, (2) thể tích.", "(1) thể tích, (2) thời gian."], correct: 1, explanation: "Tốc độ phản ứng hóa học thường được định nghĩa bằng sự biến đổi nồng độ mol của một chất trong một đơn vị thời gian." },
+            { q: "Nhỏ vài giọt dung dịch nào sau đây vào dung dịch $AgNO_3$ thu được kết tủa màu trắng?", options: ["$NaCl$.", "$NaBr$.", "$KI$.", "$HF$."], correct: 0, explanation: "$NaCl$ tác dụng với $AgNO_3$ tạo kết tủa silver chloride ($AgCl$) màu trắng." },
+            { q: "Phương án mô tả đầy đủ nhất các yếu tố ảnh hưởng đến tốc độ phản ứng?", options: ["Nồng độ, nhiệt độ, chất xúc tác, áp suất.", "Nồng độ, nhiệt độ, chất xúc tác, áp suất, khối lượng chất rắn.", "Nồng độ, nhiệt độ, chất xúc tác, áp suất, diện tích bề mặt chất rắn.", "Nồng độ, nhiệt độ, chất xúc tác."], correct: 2, explanation: "Các yếu tố chính gồm: Nồng độ, nhiệt độ, áp suất (cho chất khí), diện tích tiếp xúc (cho chất rắn) và chất xúc tác." },
+            { q: "Câu nào sau đây đúng về chất xúc tác?", options: ["Chất không làm thay đổi tốc độ phản ứng và không bị tiêu hao.", "Chất làm tăng tốc độ phản ứng, nhưng không bị tiêu hao sau phản ứng.", "Chất làm tăng tốc độ và bị tiêu hao hết sau phản ứng.", "Chất làm tăng tốc độ nhưng bị tiêu hao một phần."], correct: 1, explanation: "Theo định nghĩa, chất xúc tác làm tăng tốc độ nhưng không bị thay đổi về lượng và bản chất hóa học sau phản ứng." }
+        ];
+
+        let currentIdx = 0, score = 0, isMuted = false;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function startQuiz() {
+            const name = document.getElementById('studentName').value.trim();
+            const cls = document.getElementById('studentClass').value.trim();
+            if (!name || !cls) {
+                const card = document.querySelector('.login-card');
+                card.style.animation = 'shake 0.4s';
+                setTimeout(() => card.style.animation = '', 400);
+                return;
+            }
+            document.getElementById('displayUserInfo').innerText = `Học sinh: ${name} - Lớp: ${cls}`;
+            document.getElementById('displayFinalUser').innerText = `Học sinh: ${name} - Lớp: ${cls}`;
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-ui').style.display = 'flex';
+            loadQuestion();
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('muteBtn').classList.toggle('active', isMuted);
+            document.getElementById('muteIcon').className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        }
+
+        function playSound(f, type, d) {
+            if (isMuted) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + d);
+        }
+
+        function loadQuestion() {
+            const q = questions[currentIdx];
+            document.getElementById('questionText').innerHTML = q.q;
+            document.getElementById('progress-text').innerText = `CÂU ${currentIdx + 1}/${questions.length}`;
+            document.getElementById('explanationBox').style.display = 'none';
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = `opt-btn opt-${['a','b','c','d'][i]}`;
+                btn.innerHTML = `<span class="badge">${String.fromCharCode(65+i)}</span><span class="opt-text">${opt}</span>`;
+                btn.onclick = () => check(btn, i);
+                grid.appendChild(btn);
+            });
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // Cuộn câu hỏi và đáp án lên đầu khi qua câu mới
+            document.querySelector('.question-container').scrollTop = 0;
+            document.querySelector('.options-grid').scrollTop = 0;
+            
+            if (window.MathJax) MathJax.Hub.Queue(["Typeset", MathJax.Hub, "quiz-ui"]);
+        }
+
+        function check(btn, userIdx) {
+            const q = questions[currentIdx], correctIdx = q.correct;
+            const btns = document.querySelectorAll('.opt-btn');
+            btns.forEach(b => b.disabled = true);
+            const expBox = document.getElementById('explanationBox');
+            document.getElementById('explanationContent').innerHTML = q.explanation;
+            expBox.style.display = 'block';
+            
+            if(userIdx === correctIdx) {
+                btn.classList.add('correct');
+                playSound(880, 'sine', 0.3);
+                score += (10 / questions.length);
+                document.getElementById('currentScore').innerText = (Math.round(score * 100) / 100).toFixed(1);
+            } else {
+                btn.classList.add('wrong');
+                playSound(150, 'sawtooth', 0.4);
+                btns[correctIdx].classList.add('correct');
+                btns[correctIdx].classList.add('animate-pulse');
+            }
+            document.getElementById('nextBtn').style.display = 'flex';
+            if (window.MathJax) MathJax.Hub.Queue(["Typeset", MathJax.Hub, "explanationBox"]);
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < questions.length) loadQuestion();
+            else {
+                document.getElementById('quiz-ui').style.display = 'none';
+                document.getElementById('result-screen').style.display = 'flex';
+                document.getElementById('finalScore').innerText = (Math.round(score * 100) / 100).toFixed(1);
+            }
+        }
+    </script>
+    <style>
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+    </style>
+</body>
+</html>
